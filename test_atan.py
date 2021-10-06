@@ -32,4 +32,4 @@ kelvin_debug_log.logger.debug("b:"+str(b))
 
 #弧度轉角度
 b=math.atan2(1,0)
-kelvin_debug_log.logger.debug("")
+kelvin_debug_log.logger.debug("b:"+str(b/math.pi*180))

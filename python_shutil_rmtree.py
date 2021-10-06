@@ -16,3 +16,5 @@ def delete_log_file():
 
     except OSError as e:
         print(e.strerror)
+
+delete_log_file()
