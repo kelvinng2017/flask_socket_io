@@ -68,9 +68,9 @@ def receive_socket_info(handle, expected_msg, side='server', do_decode=True, do_
     """
     while True:
         if do_decode:
-            socket_data = handle.recv(BUFFER_SIZE).decode()
+            socket_data = handle.recv(BUFFER_SIZE,socket.MSG_WAITALL).decode()
         else:
-            socket_data = handle.recv(BUFFER_SIZE)
+            socket_data = handle.recv(BUFFER_SIZE,socket.MSG_WAITALL)
 
         if do_print_info:
             current_time = dt.today().strftime('%Y-%m-%d %H:%M:%S.%f')
