@@ -8,7 +8,8 @@ import json
 import os
 import datetime
 import show_and_save_log_file
-
+import sys
+from datetime import datetime as dt
 f =open('./config.json','r')
 data = json.load(f)
 f.close()
@@ -26,7 +27,7 @@ __author__ = 'Evan'
 
 
 REMOTE_IP = ('127.0.0.1', 6666)
-BUFFER_SIZE = 1024
+BUFFER_SIZE = 4096
 SOCKET_TIMEOUT_TIME = 120
 
 
@@ -46,12 +47,12 @@ def send_socket_info(handle, msg, side='server', do_encode=True, do_print_info=T
         handle.send(msg)
 
     if do_print_info:
-        current_time = time.strftime('%Y-%m-%d %H:%M:%S')
+        current_time = dt.today().strftime('%Y-%m-%d %H:%M:%S.%f')
         if side == 'server':
-            kelvin_debug_log.logger.debug(f'Server send --> {current_time} - {msg}')
+            kelvin_debug_log.logger.debug(f'Server send --> {current_time} - \n{msg} -size:{sys.getsizeof(msg)}')
             #print(f'Server send --> {current_time} - {msg}')
         else:
-            kelvin_debug_log.logger.debug(f'Client send --> {current_time} - {msg}')
+            kelvin_debug_log.logger.debug(f'Client send --> {current_time} - \n{msg} -size:{sys.getsizeof(msg)}')
             #print(f'Client send --> {current_time} - {msg}')
 
 
@@ -72,12 +73,12 @@ def receive_socket_info(handle, expected_msg, side='server', do_decode=True, do_
             socket_data = handle.recv(BUFFER_SIZE)
 
         if do_print_info:
-            current_time = time.strftime('%Y-%m-%d %H:%M:%S')
+            current_time = dt.today().strftime('%Y-%m-%d %H:%M:%S.%f')
             if side == 'server':
-                kelvin_debug_log.logger.debug(f'Server received ==> {current_time} - {socket_data}')
+                kelvin_debug_log.logger.debug(f'Server received ==> {current_time} - \n{socket_data} -size:{sys.getsizeof(socket_data)}')
                 #print(f'Server received ==> {current_time} - {socket_data}')
             else:
-                kelvin_debug_log.logger.debug(f'Client received ==> {current_time} - {socket_data}')
+                kelvin_debug_log.logger.debug(f'Client received ==> {current_time} - \n{socket_data} -size:{sys.getsizeof(socket_data)}')
                 #print(f'Client received ==> {current_time} - {socket_data}')
 
         # 如果expected_msg為空，跳出循環
@@ -117,15 +118,16 @@ def start_client_socket():
     
     # 與server端交互
     i=0
-
+    ans= ""
     while True:
         #print("hello")
-        if i<=1000:
-            answer = "car_"+str(i)
+        if i<=100:
+            answer = "abcdefghijklmnopgrstuvwxyz_car_"+str(i)+"\n"
         else:
             answer = "quit"
         i =i+1
-        send_socket_info(handle=client, side='client', msg=answer)
+        ans  = ans +answer
+        send_socket_info(handle=client, side='client', msg=ans)
 
         socket_data = receive_socket_info(handle=client, side='client', expected_msg='')
         if 'quit' in socket_data:

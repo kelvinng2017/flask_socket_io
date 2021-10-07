@@ -4,11 +4,13 @@
 """
 非阻塞式TCP连接
 """
+import sys
 import time
 import socketserver
 import json
 import os
 import datetime
+from datetime import datetime as dt
 import show_and_save_log_file
 
 f =open('./config.json','r')
@@ -27,7 +29,7 @@ __author__ = 'Evan'
 
 
 SOCKET_IP = ('127.0.0.1', 6666)
-BUFFER_SIZE = 1024
+BUFFER_SIZE = 4096
 SOCKET_TIMEOUT_TIME = 60
 
 
@@ -58,12 +60,12 @@ class UnblockSocketServer(socketserver.BaseRequestHandler):
             handle.send(msg)
 
         if do_print_info:
-            current_time = time.strftime('%Y-%m-%d %H:%M:%S')
+            current_time = dt.today().strftime('%Y-%m-%d %H:%M:%S.%f')
             if side == 'server':
-                kelvin_debug_log.logger.debug(f'Server send --> {current_time} - {msg}')
+                kelvin_debug_log.logger.debug(f'Server send --> {current_time} - \n{msg} -size:{sys.getsizeof(msg)}')
                 #print(f'Server send --> {current_time} - {msg}')
             else:
-                kelvin_debug_log.logger.debug(f'Client send --> {current_time} - {msg}')
+                kelvin_debug_log.logger.debug(f'Client send --> {current_time} - \n{msg} -size:{sys.getsizeof(msg)}')
                 #print(f'Client send --> {current_time} - {msg}')
 
     @staticmethod
@@ -84,12 +86,12 @@ class UnblockSocketServer(socketserver.BaseRequestHandler):
                 socket_data = handle.recv(BUFFER_SIZE)
 
             if do_print_info:
-                current_time = time.strftime('%Y-%m-%d %H:%M:%S')
+                current_time = dt.today().strftime('%Y-%m-%d %H:%M:%S.%f')
                 if side == 'server':
-                    kelvin_debug_log.logger.debug(f'Server received ==> {current_time} - {socket_data}')
+                    kelvin_debug_log.logger.debug(f'Server received ==> {current_time} - \n{socket_data} -size:{sys.getsizeof(socket_data)}')
                     #print(f'Server received ==> {current_time} - {socket_data}')
                 else:
-                    kelvin_debug_log.logger.debug(f'Client received ==> {current_time} - {socket_data}')
+                    kelvin_debug_log.logger.debug(f'Client received ==> {current_time} - \n{socket_data} -size:{sys.getsizeof(socket_data)}')
                     #print(f'Client received ==> {current_time} - {socket_data}')
 
             # 如果expected_msg為空，跳出循環
