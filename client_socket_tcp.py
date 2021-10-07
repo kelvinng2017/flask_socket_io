@@ -3,12 +3,31 @@
 import time
 import socket
 
+import math
+import json
+import os
+import datetime
+import show_and_save_log_file
+
+f =open('./config.json','r')
+data = json.load(f)
+f.close()
+log_file_path = data.get('log_file_path')
+timeNow = datetime.datetime.now()
+file_name_time = timeNow.strftime("%Y-%m-%d_%Hh%Mm%Ss")
+if not os.path.exists(os.path.join(os.getcwd()+log_file_path)):
+    print("creeate log file folder")
+    os.makedirs(os.path.join(os.getcwd()+"/log/kelvinng_log_file/"))
+file_name_path = os.getcwd()+log_file_path
+kelvin_debug_log = show_and_save_log_file.Logger(file_name_path+""+os.path.basename(__file__)+"_"+file_name_time +
+                                    ".log", level='debug')
+
 __author__ = 'Evan'
 
 
 REMOTE_IP = ('127.0.0.1', 6666)
 BUFFER_SIZE = 1024
-SOCKET_TIMEOUT_TIME = 60
+SOCKET_TIMEOUT_TIME = 120
 
 
 def send_socket_info(handle, msg, side='server', do_encode=True, do_print_info=True):
@@ -29,9 +48,11 @@ def send_socket_info(handle, msg, side='server', do_encode=True, do_print_info=T
     if do_print_info:
         current_time = time.strftime('%Y-%m-%d %H:%M:%S')
         if side == 'server':
-            print(f'Server send --> {current_time} - {msg}')
+            kelvin_debug_log.logger.debug(f'Server send --> {current_time} - {msg}')
+            #print(f'Server send --> {current_time} - {msg}')
         else:
-            print(f'Client send --> {current_time} - {msg}')
+            kelvin_debug_log.logger.debug(f'Client send --> {current_time} - {msg}')
+            #print(f'Client send --> {current_time} - {msg}')
 
 
 def receive_socket_info(handle, expected_msg, side='server', do_decode=True, do_print_info=True):
@@ -53,9 +74,11 @@ def receive_socket_info(handle, expected_msg, side='server', do_decode=True, do_
         if do_print_info:
             current_time = time.strftime('%Y-%m-%d %H:%M:%S')
             if side == 'server':
-                print(f'Server received ==> {current_time} - {socket_data}')
+                kelvin_debug_log.logger.debug(f'Server received ==> {current_time} - {socket_data}')
+                #print(f'Server received ==> {current_time} - {socket_data}')
             else:
-                print(f'Client received ==> {current_time} - {socket_data}')
+                kelvin_debug_log.logger.debug(f'Client received ==> {current_time} - {socket_data}')
+                #print(f'Client received ==> {current_time} - {socket_data}')
 
         # 如果expected_msg為空，跳出循環
         if not expected_msg:
@@ -87,14 +110,21 @@ def start_client_socket():
     client.connect((ip, port))  # 連接遠程server端
     print(f'連接server端 {ip}:{port} 成功')
     client.settimeout(SOCKET_TIMEOUT_TIME)  # 設置客戶端超時時間
-
+    print("hello1")
     # 與server端握手，達成一致
-    send_socket_info(handle=client, side='client', msg='客戶端已就緒')
+    send_socket_info(handle=client, side='client', msg='client端已就緒')
     receive_socket_info(handle=client, side='client', expected_msg='server端已就緒')
-
+    
     # 與server端交互
+    i=0
+
     while True:
-        answer = input('請輸入要發送給server端的信息:')
+        #print("hello")
+        if i<=1000:
+            answer = "car_"+str(i)
+        else:
+            answer = "quit"
+        i =i+1
         send_socket_info(handle=client, side='client', msg=answer)
 
         socket_data = receive_socket_info(handle=client, side='client', expected_msg='')

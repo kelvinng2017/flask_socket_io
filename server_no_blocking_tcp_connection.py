@@ -6,7 +6,23 @@
 """
 import time
 import socketserver
+import json
+import os
+import datetime
+import show_and_save_log_file
 
+f =open('./config.json','r')
+data = json.load(f)
+f.close()
+log_file_path = data.get('log_file_path')
+timeNow = datetime.datetime.now()
+file_name_time = timeNow.strftime("%Y-%m-%d_%Hh%Mm%Ss")
+if not os.path.exists(os.path.join(os.getcwd()+log_file_path)):
+    print("creeate log file folder")
+    os.makedirs(os.path.join(os.getcwd()+"/log/kelvinng_log_file/"))
+file_name_path = os.getcwd()+log_file_path
+kelvin_debug_log = show_and_save_log_file.Logger(file_name_path+""+os.path.basename(__file__)+"_"+file_name_time +
+                                    ".log", level='debug')
 __author__ = 'Evan'
 
 
@@ -44,9 +60,11 @@ class UnblockSocketServer(socketserver.BaseRequestHandler):
         if do_print_info:
             current_time = time.strftime('%Y-%m-%d %H:%M:%S')
             if side == 'server':
-                print(f'Server send --> {current_time} - {msg}')
+                kelvin_debug_log.logger.debug(f'Server send --> {current_time} - {msg}')
+                #print(f'Server send --> {current_time} - {msg}')
             else:
-                print(f'Client send --> {current_time} - {msg}')
+                kelvin_debug_log.logger.debug(f'Client send --> {current_time} - {msg}')
+                #print(f'Client send --> {current_time} - {msg}')
 
     @staticmethod
     def receive_socket_info(handle, expected_msg, side='server', do_decode=True, do_print_info=True):
@@ -68,9 +86,11 @@ class UnblockSocketServer(socketserver.BaseRequestHandler):
             if do_print_info:
                 current_time = time.strftime('%Y-%m-%d %H:%M:%S')
                 if side == 'server':
-                    print(f'Server received ==> {current_time} - {socket_data}')
+                    kelvin_debug_log.logger.debug(f'Server received ==> {current_time} - {socket_data}')
+                    #print(f'Server received ==> {current_time} - {socket_data}')
                 else:
-                    print(f'Client received ==> {current_time} - {socket_data}')
+                    kelvin_debug_log.logger.debug(f'Client received ==> {current_time} - {socket_data}')
+                    #print(f'Client received ==> {current_time} - {socket_data}')
 
             # 如果expected_msg為空，跳出循環
             if not expected_msg:
@@ -108,7 +128,7 @@ class UnblockSocketServer(socketserver.BaseRequestHandler):
                 self.send_socket_info(handle=conn, msg='quit')
                 break
 
-            answer = input('請回复client端的信息：')
+            answer = socket_data+"_move"
             self.send_socket_info(handle=conn, msg=answer)
 
         # 斷開socket連接

@@ -1,12 +1,12 @@
 
 
-from python_shutil_rmtree import delete_log_file
+
 import math
 import json
 import os
 import datetime
 import show_and_save_log_file
-delete_log_file()
+
 f =open('./config.json','r')
 data = json.load(f)
 f.close()
