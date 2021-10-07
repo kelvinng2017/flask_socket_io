@@ -68,10 +68,10 @@ def receive_socket_info(handle, expected_msg, side='server', do_decode=True, do_
     """
     while True:
         if do_decode:
-            socket_data = handle.recv(BUFFER_SIZE,socket.MSG_WAITALL).decode()
+            socket_data = handle.recv(BUFFER_SIZE).decode()
             kelvin_debug_log.logger.debug(f'data_len:{len(socket_data)} -data_size:{sys.getsizeof(socket_data)}')
         else:
-            socket_data = handle.recv(BUFFER_SIZE,socket.MSG_WAITALL)
+            socket_data = handle.recv(BUFFER_SIZE)
             kelvin_debug_log.logger.debug(f'data_len:{len(socket_data)} -data_size:{sys.getsizeof(socket_data)}')
 
         if do_print_info:
