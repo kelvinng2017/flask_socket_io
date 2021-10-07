@@ -28,8 +28,8 @@ kelvin_debug_log = show_and_save_log_file.Logger(file_name_path+""+os.path.basen
 __author__ = 'Evan'
 
 
-SOCKET_IP = ('127.0.0.1', 6666)
-BUFFER_SIZE = 4096
+SOCKET_IP = ('192.168.0.77', 6666)
+BUFFER_SIZE = 5000
 SOCKET_TIMEOUT_TIME = 60
 
 

@@ -27,7 +27,7 @@ __author__ = 'Evan'
 
 
 REMOTE_IP = ('127.0.0.1', 6666)
-BUFFER_SIZE = 4096
+BUFFER_SIZE = 5000
 SOCKET_TIMEOUT_TIME = 120
 
 
