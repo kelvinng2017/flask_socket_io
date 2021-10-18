@@ -1,0 +1,52 @@
+[
+  {
+    "dispatchId": "20200108100001",
+    "line": "LCDD",
+    "priority": "1",
+    "taskCnt": "1",
+    "taskList": [
+      {
+        "cartId": "C60003",
+        "cassetteCnt": "3",
+        "cassetteList": [
+          {
+            "ShelfId": "A60301",
+            "cassetteNo": "D123451",
+            "toErackId": "",
+            "toErackPort": ""
+          },
+          {
+            "ShelfId": "A60302",
+            "cassetteNo": "D123452",
+            "toErackId": "",
+            "toErackPort": ""
+          },
+          {
+            "ShelfId": "A60303",
+            "cassetteNo": "D123453",
+            "toErackId": "",
+            "toErackPort": ""
+          }
+        ],
+        "command": "TRANS",
+        "sourceFloor": "6",
+        "sourceId": "L60002",
+        "sourcePort": "",
+        "sourceType": "PARKING",
+        "swapAutoUpload": "Y",
+        "swapCassetteNo": "",
+        "swapTargetId": "",
+        "swapTargetPort": "",
+        "swapTargetType": "",
+        "targetFloor": "4",
+        "targetId": "L40002",
+        "targetPort": "",
+        "targetType": "ERACK"
+      }
+    ]
+  },
+  {
+    "message": "ERROR MESSAGE",
+    "status": "NG"
+  }
+]
